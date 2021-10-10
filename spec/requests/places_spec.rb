@@ -19,26 +19,20 @@ RSpec.describe PlacesController do
                                            name: place.name,
                                            lat: place.lat,
                                            lon: place.lon,
-                                           slug: place.slug
+                                           slug: place.slug,
+                                           rating: place.rating
                                          )
-
       end
     end
 
     it 'should return places in proper order' do
-      place1 = build :place
-      place1.rating = 1
-      place1.save
-      place2 = build :place
-      place2.rating = 5
-      place2.save
-
+      place1 = create(:place, rating: 1)
+      place2 = create(:place, rating: 4)
       get '/places'
       expect(json_data.length).to eq(2)
       aggregate_failures do
-        expect(json_data.first[:id]).to eq(place2.id.to_s)
+        expect(json_data[0][:id]).to eq(place2.id.to_s)
         expect(json_data[1][:id]).to eq(place1.id.to_s)
-
       end
     end
   end
