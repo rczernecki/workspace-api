@@ -11,17 +11,17 @@ RSpec.describe PlacesController do
       place = create :place
       get '/places'
       expect(json_data.length).to eq(1)
-      expected = json_data.first
+      result = json_data.first
       aggregate_failures do
-        expect(expected[:id]).to eq(place.id.to_s)
-        expect(expected[:type]).to eq('place')
-        expect(expected[:attributes]).to eq(
-                                           name: place.name,
-                                           lat: place.lat,
-                                           lon: place.lon,
-                                           slug: place.slug,
-                                           rating: place.rating
-                                         )
+        expect(result[:id]).to eq(place.id.to_s)
+        expect(result[:type]).to eq('place')
+        expect(result[:attributes]).to eq(
+                                         name: place.name,
+                                         lat: place.lat,
+                                         lon: place.lon,
+                                         slug: place.slug,
+                                         rating: place.rating
+                                       )
       end
     end
 
@@ -50,6 +50,31 @@ RSpec.describe PlacesController do
       expect(json[:meta].keys).to contain_exactly(
                                     :total, :total_pages, :current_page
                                   )
+    end
+  end
+
+  describe 'show' do
+    it 'should return a success response' do
+      place = create(:place)
+      get "/places/#{place.id}"
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'should return a proper JSON' do
+      place = create(:place)
+      get "/places/#{place.id}"
+      result = json_data
+      aggregate_failures do
+        expect(result[:id]).to eq(place.id.to_s)
+        expect(result[:type]).to eq('place')
+        expect(result[:attributes]).to eq(
+                                         name: place.name,
+                                         lat: place.lat,
+                                         lon: place.lon,
+                                         slug: place.slug,
+                                         rating: place.rating
+                                       )
+      end
     end
   end
 end
