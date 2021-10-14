@@ -35,5 +35,21 @@ RSpec.describe PlacesController do
         expect(json_data[1][:id]).to eq(place1.id.to_s)
       end
     end
+
+    it 'paginates results' do
+      place1, place2, place3 = create_list(:place, 3)
+      get '/places', params: { page: { number: 2, size: 1 } }
+      expect(json_data.length).to eq(1)
+      expect(json_data[0][:id]).to eq(place2.id.to_s)
+    end
+
+    it 'contains metadata response' do
+      place1, place2, place3 = create_list(:place, 3)
+      get '/places', params: { page: { number: 2, size: 1 } }
+      expect(json[:meta].length).to eq(3)
+      expect(json[:meta].keys).to contain_exactly(
+                                    :total, :total_pages, :current_page
+                                  )
+    end
   end
 end
