@@ -31,6 +31,7 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'jsonapi-serializer'
   gem 'figaro'
+  gem 'kaminari'
 end
 
 group :development do
