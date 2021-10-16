@@ -36,6 +36,16 @@ class PlacesController < ApplicationController
     end
   end
 
+  def destroy
+    begin
+      Place.destroy(params[:id])
+    rescue
+      render nothing: true, status: :not_found
+    else
+      render nothing: true, status: :ok
+    end
+  end
+
   def place_params
     params.require(:data).require(:attributes).permit(:name, :lat, :lon, :slug)
   end

@@ -31,7 +31,7 @@ RSpec.describe PlacesController do
     end
   end
 
-  describe 'show' do
+  describe '#show' do
     it 'should return a proper JSON' do
       place = create(:place)
       get "/places/#{place.id}"
@@ -51,7 +51,7 @@ RSpec.describe PlacesController do
     end
   end
 
-  describe 'create' do
+  describe '#create' do
     it 'should save new entry' do
       place = build(:place)
       post '/places', params: { data: { attributes: place.attributes } }
@@ -73,7 +73,7 @@ RSpec.describe PlacesController do
     end
   end
 
-  describe 'update' do
+  describe '#update' do
     it 'should update existing entry' do
       place = create(:place)
       new_name = 'new name'
@@ -100,4 +100,19 @@ RSpec.describe PlacesController do
       expect(response).to have_http_status(:not_found)
     end
   end
+
+  describe '#destroy' do
+    it 'should delete existing entry' do
+      place = create(:place)
+      delete "/places/#{place.id}"
+      expect(response).to have_http_status(:ok)
+      expect { place.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it 'should return not found response' do
+      delete "/places/1"
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
 end

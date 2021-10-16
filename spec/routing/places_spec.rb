@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe '/places routes' do
   it 'routes to places#index' do
     aggregate_failures do
-      # expect(get '/places').to route_to(controller: 'places', action: 'index')
       expect(get '/places').to route_to('places#index')
       # expect(get '/places?page[number]=3').to route_to('places#index', page: { number: 3 })
     end
@@ -20,5 +19,9 @@ RSpec.describe '/places routes' do
   it 'routes to places#update' do
     expect(put '/places/1').to route_to('places#update', id: '1')
     expect(patch '/places/1').to route_to('places#update', id: '1')
+  end
+
+  it 'routes to places#delete' do
+    expect(delete '/places/1').to route_to('places#destroy', id: '1')
   end
 end
