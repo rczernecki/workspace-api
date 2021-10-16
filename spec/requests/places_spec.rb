@@ -72,4 +72,32 @@ RSpec.describe PlacesController do
       expect(error[:title]).to eq("Name can't be blank")
     end
   end
+
+  describe 'update' do
+    it 'should update existing entry' do
+      place = create(:place)
+      new_name = 'new name'
+      put "/places/#{place.id}", params: { data: { attributes: { name: new_name } } }
+      expect(response).to have_http_status(:ok)
+      expect(place.name).not_to eq(new_name)
+      expect(place.reload.name).to eq(new_name)
+    end
+
+    it 'should return an error response' do
+      place = create(:place)
+      empty_name = ''
+      put "/places/#{place.id}", params: { data: { attributes: { name: empty_name } } }
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(place.reload.name).not_to eq(empty_name)
+      expect(validation_errors).not_to be_empty
+      error = validation_errors.first
+      expect(error[:id]).to eq("name")
+      expect(error[:title]).to eq("Name can't be blank")
+    end
+
+    it 'should return not found response' do
+      put "/places/1", params: { data: { attributes: { name: "new name" } } }
+      expect(response).to have_http_status(:not_found)
+    end
+  end
 end

@@ -22,6 +22,20 @@ class PlacesController < ApplicationController
     end
   end
 
+  def update
+    begin
+      place = Place.find(params[:id])
+    rescue
+      render nothing: true, status: :not_found
+    else
+      if place.update(place_params)
+        render json: serializer.new(place), status: :ok
+      else
+        render json: ErrorSerializer.serialize(place.errors), status: :unprocessable_entity
+      end
+    end
+  end
+
   def place_params
     params.require(:data).require(:attributes).permit(:name, :lat, :lon, :slug)
   end

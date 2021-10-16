@@ -16,4 +16,9 @@ RSpec.describe '/places routes' do
   it 'routes to places#create' do
     expect(post '/places').to route_to('places#create')
   end
+
+  it 'routes to places#update' do
+    expect(put '/places/1').to route_to('places#update', id: '1')
+    expect(patch '/places/1').to route_to('places#update', id: '1')
+  end
 end
