@@ -6,4 +6,8 @@ module ApiHelpers
   def json_data
     json[:data]
   end
+
+  def validation_errors
+    json[:errors]
+  end
 end

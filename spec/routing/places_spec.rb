@@ -8,7 +8,12 @@ RSpec.describe '/places routes' do
       # expect(get '/places?page[number]=3').to route_to('places#index', page: { number: 3 })
     end
   end
+
   it 'routes to places#show' do
     expect(get '/places/1').to route_to('places#show', id: '1')
+  end
+
+  it 'routes to places#create' do
+    expect(post '/places').to route_to('places#create')
   end
 end

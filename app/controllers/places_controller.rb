@@ -1,5 +1,5 @@
 class PlacesController < ApplicationController
-  include Paginable
+  include Paginable, ErrorSerializer
 
   def index
     if pagination_params_exists
@@ -11,6 +11,19 @@ class PlacesController < ApplicationController
 
   def show
     render json: serializer.new(Place.find(params[:id])), status: :ok
+  end
+
+  def create
+    place = Place.new(place_params)
+    if place.save
+      render json: serializer.new(place), status: :created
+    else
+      render json: ErrorSerializer.serialize(place.errors), status: :unprocessable_entity
+    end
+  end
+
+  def place_params
+    params.require(:data).require(:attributes).permit(:name, :lat, :lon, :slug)
   end
 
   def serializer
