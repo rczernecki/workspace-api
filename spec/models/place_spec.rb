@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Place, type: :model do
-  let(:place) { FactoryBot.create(:place) }
+  let(:place) { create(:place) }
 
   describe '#validations' do
     it 'tests model factory' do

@@ -1,12 +1,8 @@
 class PlacesController < ApplicationController
-  include Paginable, ErrorSerializer
+  include Paginable
 
   def index
-    if pagination_params_exists
-      render_paginated_collection(Place.by_rating_desc)
-    else
-      render json: serializer.new(Place.by_rating_desc), status: :ok
-    end
+    render_paginated_collection(Place.by_rating_desc)
   end
 
   def show
@@ -14,36 +10,18 @@ class PlacesController < ApplicationController
   end
 
   def create
-    place = Place.new(place_params)
-    if place.save
-      render json: serializer.new(place), status: :created
-    else
-      render json: ErrorSerializer.serialize(place.errors), status: :unprocessable_entity
-    end
+    render json: serializer.new(Place.create!(place_params)), status: :created
   end
 
   def update
-    begin
-      place = Place.find(params[:id])
-    rescue
-      render nothing: true, status: :not_found
-    else
-      if place.update(place_params)
-        render json: serializer.new(place), status: :ok
-      else
-        render json: ErrorSerializer.serialize(place.errors), status: :unprocessable_entity
-      end
-    end
+    place = Place.find(params[:id])
+    place.update!(place_params)
+    render json: serializer.new(place), status: :ok
   end
 
   def destroy
-    begin
-      Place.destroy(params[:id])
-    rescue
-      render nothing: true, status: :not_found
-    else
-      render nothing: true, status: :ok
-    end
+    Place.destroy(params[:id])
+    render nothing: true, status: :ok
   end
 
   def place_params

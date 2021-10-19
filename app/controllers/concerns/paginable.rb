@@ -2,13 +2,13 @@ module Paginable
   extend ActiveSupport::Concern
 
   def render_paginated_collection(collection)
-    paginated = collection.page(params[:page]['number'] || 1).per(params[:page]['size'] || limit_value)
-    options = { meta: meta(paginated) }
+    paginated = collection.page
+    parameters = pagination_params
+    unless parameters[:page].nil?
+      paginated = collection.page(parameters[:page][:number]).per(parameters[:page][:size])
+    end
+    options = { meta: meta(paginated), links: links(paginated) }
     render json: serializer.new(paginated, options), status: :ok
-  end
-
-  def pagination_params_exists
-    params[:page].present? and (params[:page]['number'].present? or params[:page]['size'].present?)
   end
 
   private
@@ -17,11 +17,30 @@ module Paginable
     {
       total: paginated.total_count,
       total_pages: paginated.total_pages,
-      current_page: paginated.current_page
+      current_page: paginated.current_page,
+      per_page: paginated.limit_value
     }
+  end
+
+  def links(paginated)
+    links_hash = {
+      first: "#{base_url}?page[number]=1&page[size]=#{paginated.limit_value}",
+      last: "#{base_url}?page[number]=#{paginated.total_pages}&page[size]=#{paginated.limit_value}"
+    }
+    unless paginated.current_page == 1
+      links_hash = links_hash.merge prev: "#{base_url}?page[number]=#{paginated.current_page - 1}&page[size]=#{paginated.limit_value}"
+    end
+    unless paginated.current_page == paginated.total_pages
+      links_hash = links_hash.merge next: "#{base_url}?page[number]=#{paginated.current_page + 1}&page[size]=#{paginated.limit_value}"
+    end
+    links_hash
   end
 
   def base_url
     request.base_url + request.path
+  end
+
+  def pagination_params
+    params.permit(page: [:number, :size])
   end
 end
