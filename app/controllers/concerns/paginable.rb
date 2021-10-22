@@ -7,19 +7,22 @@ module Paginable
     unless parameters[:page].nil?
       paginated = collection.page(parameters[:page][:number]).per(parameters[:page][:size])
     end
-    options = { meta: meta(paginated), links: links(paginated) }
+    options = paginated.total_count == 0 ? { meta: meta(paginated) } : { meta: meta(paginated), links: links(paginated) }
     render json: serializer.new(paginated, options), status: :ok
   end
 
   private
 
   def meta(paginated)
-    {
+    meta_hash = {
       total: paginated.total_count,
-      total_pages: paginated.total_pages,
-      current_page: paginated.current_page,
-      per_page: paginated.limit_value
+      total_pages: paginated.total_pages
     }
+    unless paginated.total_count == 0
+      meta_hash = meta_hash.merge current_page: paginated.current_page
+      meta_hash = meta_hash.merge per_page: paginated.limit_value
+    end
+    meta_hash
   end
 
   def links(paginated)
@@ -27,10 +30,10 @@ module Paginable
       first: "#{base_url}?page[number]=1&page[size]=#{paginated.limit_value}",
       last: "#{base_url}?page[number]=#{paginated.total_pages}&page[size]=#{paginated.limit_value}"
     }
-    unless paginated.current_page == 1
+    if paginated.current_page != 1 && paginated.current_page <= paginated.total_pages + 1
       links_hash = links_hash.merge prev: "#{base_url}?page[number]=#{paginated.current_page - 1}&page[size]=#{paginated.limit_value}"
     end
-    unless paginated.current_page == paginated.total_pages
+    if paginated.current_page < paginated.total_pages
       links_hash = links_hash.merge next: "#{base_url}?page[number]=#{paginated.current_page + 1}&page[size]=#{paginated.limit_value}"
     end
     links_hash

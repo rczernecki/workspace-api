@@ -5,7 +5,7 @@ RSpec.describe PlacesController do
   describe '#index' do
     it 'should return paginated results' do
       create_list(:place, 3)
-      test_pagination path
+      test_pagination(path, Place)
     end
 
     it 'should return correct json' do
