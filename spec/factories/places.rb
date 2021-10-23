@@ -1,5 +1,3 @@
-require 'securerandom'
-
 FactoryBot.define do
   factory :place do
     sequence(:name) { |i| "Example Name #{i}" }

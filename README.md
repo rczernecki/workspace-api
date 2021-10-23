@@ -1,24 +1,31 @@
-# README
+# workspace-api
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Ruby on Rails REST API for workspace app.
 
-Things you may want to cover:
+## Technologies
 
-* Ruby version
+Project is created with:
 
-* System dependencies
+* ruby version: 2.7.4
+* rails version: 6.1.4.1
 
-* Configuration
+## Installation and running the app inside docker container
 
-* Database creation
+Install docker and docker-compose
 
-* Database initialization
+```bash
+git clone
+cd workspace-api
+```
 
-* How to run the test suite
+### Set parameters:<br />
 
-* Services (job queues, cache servers, search engines, etc.)
+docker-compose.yml:<br />
+POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB<br />
+---
+config\database.yml:<br />
+production: database, username, password (same as in docker-compose.yml)
 
-* Deployment instructions
-
-* ...
+```bash
+docker-compose up -d --build
+```

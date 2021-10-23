@@ -1,3 +1,6 @@
+require "active_support/concern"
+require 'kaminari'
+
 module Paginable
   extend ActiveSupport::Concern
 
