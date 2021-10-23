@@ -18,11 +18,11 @@ git clone
 cd workspace-api
 ```
 
-### Set parameters:<br />
+### Set parameters:
 
 docker-compose.yml:<br />
 POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB<br />
----
+
 config\database.yml:<br />
 production: database, username, password (same as in docker-compose.yml)
 
