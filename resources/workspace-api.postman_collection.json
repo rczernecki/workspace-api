@@ -1,0 +1,428 @@
+{
+	"info": {
+		"_postman_id": "d071b7fc-a3f4-42f5-b1ed-8e0c0965fb5b",
+		"name": "workspace-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Places",
+			"item": [
+				{
+					"name": "Create Place",
+					"item": [
+						{
+							"name": "Invalid",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"attributes\": {\n            \"name\": \"\",\n\t        \"lat\": \"\",\n            \"lon\": \"\",\n            \"slug\": \"\"\n        }\n    }\n}\n"
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}/places",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"places"
+									]
+								},
+								"description": "### Invalid Request\n\n#### Expected response:\n\n**422** HTTP status code with validation error details.\n\n```json\n{\n    \"errors\": [\n        {\n            \"id\": \"name\",\n            \"title\": \"Name can't be blank\"\n        },\n        {\n            \"id\": \"name\",\n            \"title\": \"Name is too short (minimum is 1 character)\"\n        },\n        {\n            \"id\": \"lat\",\n            \"title\": \"Lat can't be blank\"\n        },\n        {\n            \"id\": \"lat\",\n            \"title\": \"Lat is not a number\"\n        },\n        {\n            \"id\": \"lon\",\n            \"title\": \"Lon can't be blank\"\n        },\n        {\n            \"id\": \"lon\",\n            \"title\": \"Lon is not a number\"\n        },\n        {\n            \"id\": \"slug\",\n            \"title\": \"Slug can't be blank\"\n        },\n        {\n            \"id\": \"slug\",\n            \"title\": \"Slug is too short (minimum is 1 character)\"\n        }\n    ]\n}\n```"
+							},
+							"response": []
+						},
+						{
+							"name": "Success",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"unique_article_id\", 1+Number(pm.environment.get(\"unique_article_id\")));"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"attributes\": {\n            \"name\": \"Test place {{$randomInt}}\",\n\t        \"lat\": 51.10771151288517,\n            \"lon\": 17.042357510153508,\n            \"slug\": \"test-place-slug-{{$randomInt}}\"\n        }\n    }\n}\n"
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}/places",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"places"
+									]
+								},
+								"description": "### Success\n\n#### Expected response:\n\n**201** HTTP status code with place details.\n\n```json\n{\n    \"data\": {\n        \"id\": \"1\",\n        \"type\": \"place\",\n        \"attributes\": {\n            \"name\": \"Test place 626\",\n            \"lat\": 51.10771151288517,\n            \"lon\": 17.042357510153508,\n            \"slug\": \"test-place-slug-717\",\n            \"rating\": 0\n        }\n    }\n}\n```"
+							},
+							"response": []
+						}
+					],
+					"description": "## Creating a new place\n\n**Required Attributes:**\n\n- name  :string\n- lat   :number\n- lon   :string\n- slug  :string",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Update Place",
+					"item": [
+						{
+							"name": "Invalid",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"data\": {\n\t\t\"attributes\": {\n\t\t\t\"name\": \"\"\n\t\t}\n\t}\n}"
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}/places/1",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"places",
+										"1"
+									]
+								},
+								"description": "### Invalid Request\n\n#### Expected response:\n\n**422** HTTP status code with validation error details.\n\n```json\n{\n    \"errors\": [\n        {\n            \"id\": \"name\",\n            \"title\": \"Name can't be blank\"\n        },\n        {\n            \"id\": \"name\",\n            \"title\": \"Name is too short (minimum is 1 character)\"\n        }\n    ]\n}\n```"
+							},
+							"response": []
+						},
+						{
+							"name": "Success",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"unique_article_id\", 1+Number(pm.environment.get(\"unique_article_id\")));"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"data\": {\n\t\t\"attributes\": {\n\t\t\t\"name\": \"New name {{$randomInt}}\"\n\t\t}\n\t}\n}"
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}/places/1",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"places",
+										"1"
+									]
+								},
+								"description": "### Success\n\n#### Expected response:\n\n**200** HTTP status code with article details.\n\n```json\n{\n    \"data\": {\n        \"id\": \"1\",\n        \"type\": \"place\",\n        \"attributes\": {\n            \"name\": \"New name 8\",\n            \"lat\": 51.10771151288517,\n            \"lon\": 17.042357510153508,\n            \"slug\": \"test-place-slug-717\",\n            \"rating\": 0\n        }\n    }\n}\n```"
+							},
+							"response": []
+						}
+					],
+					"description": "## Updating an existing place\n\n**Attributes:**\n\n- name :string\n- lat :number\n- lon :string\n- slug :string",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Delete existing place",
+					"item": [
+						{
+							"name": "Invalid",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{protocol}}://{{host}}/places/0",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"places",
+										"0"
+									]
+								},
+								"description": "### Invalid Request\n\n#### Expected response:\n\n**404** HTTP status code with no content."
+							},
+							"response": []
+						},
+						{
+							"name": "Success",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"unique_article_id\", 1+Number(pm.environment.get(\"unique_article_id\")));"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{protocol}}://{{host}}/places/1",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"places",
+										"1"
+									]
+								},
+								"description": "### Success\n\n#### Expected response:\n\n**200** HTTP status code with no content."
+							},
+							"response": []
+						}
+					],
+					"description": "## Deleting an existing place",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "List Collection",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"type": "text",
+								"value": ""
+							}
+						],
+						"url": {
+							"raw": "{{protocol}}://{{host}}/places?page[number]=1&page[size]=2",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"places"
+							],
+							"query": [
+								{
+									"key": "page[number]",
+									"value": "1"
+								},
+								{
+									"key": "page[size]",
+									"value": "2"
+								}
+							]
+						},
+						"description": "### Get Places Collection\n\nGet places paginated list with all attributes. Server returns an array of objects.\n\n#### Expected response:\n\n**200** HTTP status code with place collection and meta data and links.\n\n```json\n{\n    \"data\": [\n        {\n            \"id\": \"3\",\n            \"type\": \"place\",\n            \"attributes\": {\n                \"name\": \"Test place 177\",\n                \"lat\": 51.10771151288517,\n                \"lon\": 17.042357510153508,\n                \"slug\": \"test-place-slug-66\",\n                \"rating\": 0\n            }\n        },\n        {\n            \"id\": \"2\",\n            \"type\": \"place\",\n            \"attributes\": {\n                \"name\": \"Test place 468\",\n                \"lat\": 51.10771151288517,\n                \"lon\": 17.042357510153508,\n                \"slug\": \"test-place-slug-449\",\n                \"rating\": 0\n            }\n        }\n    ],\n    \"meta\": {\n        \"total\": 6,\n        \"total_pages\": 3,\n        \"current_page\": 1,\n        \"per_page\": 2\n    },\n    \"links\": {\n        \"first\": \"http://52.174.111.25/places?page[number]=1&page[size]=2\",\n        \"last\": \"http://52.174.111.25/places?page[number]=3&page[size]=2\",\n        \"next\": \"http://52.174.111.25/places?page[number]=2&page[size]=2\"\n    }\n}\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Single Place",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{protocol}}://{{host}}/places/2",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"places",
+								"2"
+							]
+						},
+						"description": "### Get Single place object\n\nGet single place object.\n\n#### Expected response:\n\n**200** HTTP status code with place object.\n\n```json\n{\n    \"data\": {\n        \"id\": \"2\",\n        \"type\": \"place\",\n        \"attributes\": {\n            \"name\": \"Test place 468\",\n            \"lat\": 51.10771151288517,\n            \"lon\": 17.042357510153508,\n            \"slug\": \"test-place-slug-449\",\n            \"rating\": 0\n        }\n    }\n}\n```"
+					},
+					"response": []
+				}
+			],
+			"description": "## Managing places",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{access_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
