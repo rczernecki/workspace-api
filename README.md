@@ -20,12 +20,19 @@ cd workspace-api
 
 ### Set parameters:
 
-docker-compose.yml:<br />
-POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB<br />
+- docker-compose.yml:<br />
+  POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB
 
-config\database.yml:<br />
-production: database, username, password (same as in docker-compose.yml)
+- config\database.yml:<br />
+  production: database, username, password (same as in docker-compose.yml)
 
 ```bash
 docker-compose up -d --build
 ```
+
+### Usage:
+
+In the resources directory there are:<br/>
+
+- Postman collection, which contains the API documentation
+- Environment file holding parameters, which allows to use the hosted application.
