@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-  # get '/places', to: 'places#index'
-  resources :places
+  resources :places, except: [:new, :edit]
+  scope '/auth' do
+    post 'signup', to: 'auth#sign_up', as: 'signup'
+    get 'login', to: 'auth#login', as: 'login'
+    post 'refresh', to: 'auth#refresh', as: 'refresh'
+  end
 end

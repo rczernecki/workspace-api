@@ -1,6 +1,6 @@
 module ErrorSerializer
 
-  def ErrorSerializer.serialize(errors)
+  def ErrorSerializer.serialize_model_errors(errors)
     return if errors.nil?
 
     json = {}
@@ -10,6 +10,14 @@ module ErrorSerializer
       end
     end
     json[:errors] = new_hash.flatten
+    json
+  end
+
+  def ErrorSerializer.serialize_errors(errors)
+    return if errors.nil?
+
+    json = {}
+    json[:errors] = errors.flatten
     json
   end
 

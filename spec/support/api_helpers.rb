@@ -30,4 +30,12 @@ module ApiHelpers
   def status_created
     expect(response).to have_http_status(:created)
   end
+
+  def status_bad_request
+    expect(response).to have_http_status(:bad_request)
+  end
+
+  def status_unauthorized
+    expect(response).to have_http_status(:unauthorized)
+  end
 end

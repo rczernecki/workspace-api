@@ -31,6 +31,7 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'jsonapi-serializer'
   gem 'kaminari'
+  gem 'jwt'
 end
 
 group :development do

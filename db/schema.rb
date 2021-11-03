@@ -16,10 +16,10 @@ ActiveRecord::Schema.define(version: 2021_11_03_202414) do
   enable_extension "plpgsql"
 
   create_table "places", force: :cascade do |t|
-    t.string "name"
-    t.float "lat"
-    t.float "lon"
-    t.integer "rating"
+    t.string "name", null: false
+    t.float "lat", null: false
+    t.float "lon", null: false
+    t.integer "rating", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
