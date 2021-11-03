@@ -2,10 +2,7 @@ require 'rails_helper'
 
 RSpec.describe '/places routes' do
   it 'routes to places#index' do
-    aggregate_failures do
-      expect(get '/places').to route_to('places#index')
-      # expect(get '/places?page[number]=3').to route_to('places#index', page: { number: 3 })
-    end
+    expect(get '/places').to route_to('places#index')
   end
 
   it 'routes to places#show' do

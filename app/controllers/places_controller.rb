@@ -25,7 +25,7 @@ class PlacesController < ApplicationController
   end
 
   def place_params
-    params.require(:data).require(:attributes).permit(:name, :lat, :lon, :slug)
+    params.require(:data).require(:attributes).permit(:name, :lat, :lon)
   end
 
   def serializer

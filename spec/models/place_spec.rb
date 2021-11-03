@@ -51,21 +51,6 @@ RSpec.describe Place, type: :model do
       check_expected_validation_errors(place, [:less_than_or_equal_to])
     end
 
-    it 'tests slug validation' do
-      place1 = FactoryBot.build(:place, slug: place.slug)
-      check_expected_validation_errors(place1, [:taken])
-      place.slug = nil
-      check_expected_validation_errors(place, [:blank])
-      place.slug = ' '
-      check_expected_validation_errors(place, [:blank])
-      place.slug = 'x'
-      expect(place).to be_valid
-      place.slug = SecureRandom.uuid[0..32]
-      expect(place).to be_valid
-      place.slug = SecureRandom.uuid[0..33]
-      check_expected_validation_errors(place, [:too_long])
-    end
-
     it 'tests rating validation' do
       place.rating = nil
       check_expected_validation_errors(place, [:blank, :not_a_number])

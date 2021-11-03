@@ -1,16 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe PlacesController do
-  let(:path) { '/places' }
   describe '#index' do
     it 'should return paginated results' do
       create_list(:place, 3)
-      test_pagination(path, Place)
+      test_pagination(places_path, Place)
     end
 
     it 'should return correct json' do
       place = create(:place)
-      get path, params: { page: { number: 1, size: 1 } }
+      get places_path, params: { page: { number: 1, size: 1 } }
       status_ok
       check_place_json(json_data.first, place)
     end
@@ -18,7 +17,7 @@ RSpec.describe PlacesController do
     it 'should return places in proper order' do
       place1 = create(:place, rating: 1)
       place2 = create(:place, rating: 4)
-      get path
+      get places_path
       status_ok
       expect(json_data.length).to eq(2)
       expect(json_data[0][:id]).to eq(place2.id.to_s)
@@ -30,13 +29,13 @@ RSpec.describe PlacesController do
   describe '#show' do
     it 'should return a proper JSON' do
       place = create(:place)
-      get "#{path}/#{place.id}"
+      get place_path(place.id)
       status_ok
       check_place_json(json_data, place)
     end
 
     it 'should return not found response' do
-      delete "#{path}/1"
+      delete place_path(1)
       status_not_found
     end
   end
@@ -44,7 +43,7 @@ RSpec.describe PlacesController do
   describe '#create' do
     it 'should save new entry' do
       place = build(:place)
-      post path, params: json_api_attributes(place_attributes(place))
+      post places_path, params: json_api_attributes(place_attributes(place))
       status_created
       result = json_data
       expect(result).not_to be_nil
@@ -53,7 +52,7 @@ RSpec.describe PlacesController do
     end
 
     it 'should return an error response' do
-      post path, params: json_api_attributes({ name: '', lat: '', lon: '', slug: '' })
+      post places_path, params: json_api_attributes({ name: '', lat: '', lon: '' })
       status_unprocessable_entity
       expect(validation_errors).not_to be_empty
       error = validation_errors.first
@@ -66,7 +65,7 @@ RSpec.describe PlacesController do
     it 'should update existing entry' do
       place = create(:place)
       new_name = 'new name'
-      put "#{path}/#{place.id}", params: json_api_attributes({ name: new_name })
+      put place_path(place.id), params: json_api_attributes({ name: new_name })
       status_ok
       expect(place.name).not_to eq(new_name)
       expect(place.reload.name).to eq(new_name)
@@ -76,7 +75,7 @@ RSpec.describe PlacesController do
     it 'should return an error response' do
       place = create(:place)
       empty_name = ''
-      put "#{path}/#{place.id}", params: json_api_attributes({ name: empty_name })
+      put place_path(place.id), params: json_api_attributes({ name: empty_name })
       status_unprocessable_entity
       expect(validation_errors).not_to be_empty
       error = validation_errors.first
@@ -86,7 +85,7 @@ RSpec.describe PlacesController do
     end
 
     it 'should return not found response' do
-      put "#{path}/1", params: json_api_attributes({ name: "new name" })
+      put place_path(1), params: json_api_attributes({ name: "new name" })
       status_not_found
     end
   end
@@ -94,13 +93,13 @@ RSpec.describe PlacesController do
   describe '#destroy' do
     it 'should delete existing entry' do
       place = create(:place)
-      delete "#{path}/#{place.id}"
+      delete place_path(place.id)
       status_ok
       expect { place.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it 'should return not found response' do
-      delete "#{path}/1"
+      delete place_path(1)
       status_not_found
     end
   end
@@ -117,7 +116,6 @@ def check_place_json(given, expected)
                                     name: expected.name,
                                     lat: expected.lat,
                                     lon: expected.lon,
-                                    slug: expected.slug,
                                     rating: expected.rating
                                   )
   end
